@@ -36,30 +36,30 @@ def tracMe(info):
     fb=0
     area=info[1]
     x,y=info[0]
-    # error=x-w//2
+    error=x-w//2
     # speed=pid[0]*error+pid[1]*(error-pError)
     # speed=int(np.clip(speed,-100,100))
     if area>fbrange[0] and area<fbrange[1]:
         fb=0
     elif area>fbrange[1]:
         fb=-20
-    else: 
+    elif area<fbrange[0]:
         fb=20 
-    # if x==0:
-    #     speed=0
-    #     error=0
-    # if y==0:
-    #     speed=0
-    #     error=0
+    if x==0:
+        speed=0
+        error=0
+    if y==0:
+        speed=0
+        error=0
     print(fb)
     tello.send_rc_control(0,fb,0,0)
-    # return error
+    return error
 
 while True:
     img = frame_read.frame
     # img=cv2.resize(img)
     img,info=findFace(img)
-    findFace(img)
+    # findFace(img)
     tracMe(info)
     print("Area ",info[1])
     cv2.imshow("drone", img)
@@ -83,6 +83,5 @@ while True:
     elif key == ord('f'):
         tello.move_down(30)
 
-
-
+tello.land()
 
